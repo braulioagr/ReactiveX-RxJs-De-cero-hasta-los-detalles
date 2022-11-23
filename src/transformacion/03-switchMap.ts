@@ -4,7 +4,7 @@ import { debounceTime, map, pluck, mergeAll, mergeMap, switchMap } from 'rxjs/op
 import { ajax } from 'rxjs/ajax';
 
 import { GithubUser } from '../interfaces/github-user.interface';
-import { GithubUsersResp } from '../interfaces/github-users.interface';
+import { GithubUsersResponse } from '../interfaces/github-users.interface';
 
 
 // Referencias
@@ -23,10 +23,10 @@ const mostrarUsuarios = ( usuarios: GithubUser[] ) => {
 
         const li  = document.createElement('li');
         const img = document.createElement('img');
-        img.src = usuario.avatar_url;
+        img.src = usuario.avatarURL;
 
         const anchor  = document.createElement('a');
-        anchor.href   = usuario.html_url;
+        anchor.href   = usuario.htmlURL;
         anchor.text   = 'Ver página';
         anchor.target = '_blank';
 
@@ -48,10 +48,10 @@ const input$ = fromEvent<KeyboardEvent>( textInput, 'keyup' );
 input$.pipe(
     debounceTime<KeyboardEvent>(500),
     pluck<KeyboardEvent, string>('target','value'),
-    mergeMap<string, Observable<GithubUsersResp>>( texto => ajax.getJSON(
+    mergeMap<string, Observable<GithubUsersResponse>>( texto => ajax.getJSON(
         `https://api.github.com/search/users?q=${ texto }`
     )),
-    pluck<GithubUsersResp, GithubUser[]>('items')
+    pluck<GithubUsersResponse, GithubUser[]>('items')
 );//.subscribe( mostrarUsuarios );
 
 const url = 'https://httpbin.org/delay/1?arg='; // + fernando

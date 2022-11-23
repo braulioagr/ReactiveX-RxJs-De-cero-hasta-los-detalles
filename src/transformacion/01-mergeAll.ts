@@ -4,7 +4,7 @@ import { debounceTime, map, pluck, mergeAll } from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax';
 
 import { GithubUser } from '../interfaces/github-user.interface';
-import { GithubUsersResp } from '../interfaces/github-users.interface';
+import { GithubUsersResponse } from '../interfaces/github-users.interface';
 
 
 // Referencias
@@ -48,10 +48,10 @@ const input$ = fromEvent<KeyboardEvent>( textInput, 'keyup' );
 input$.pipe(
     debounceTime<KeyboardEvent>(500),
     pluck<KeyboardEvent, string>('target','value'),
-    map<string, Observable<GithubUsersResp>>( texto => ajax.getJSON(
+    map<string, Observable<GithubUsersResponse>>( texto => ajax.getJSON(
         `https://api.github.com/search/users?q=${ texto }`
     )),
-    mergeAll<GithubUsersResp>(),
-    pluck<GithubUsersResp, GithubUser[]>('items')
+    mergeAll<GithubUsersResponse>(),
+    pluck<GithubUsersResponse, GithubUser[]>('items')
 ).subscribe( mostrarUsuarios );
 
